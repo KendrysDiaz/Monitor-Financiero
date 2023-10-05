@@ -1,0 +1,13 @@
+.card {
+  width: 320px;
+  padding: 20px;
+  margin: 0 1.2%;
+  color: aliceblue;
+  border-radius: 8px;
+  box-shadow: -1px 1px 16px 0px rgb(77 80 90 / 40%);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px); 
+}

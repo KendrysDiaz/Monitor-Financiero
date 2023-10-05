@@ -1,0 +1,49 @@
+li {
+  cursor: pointer;
+}
+
+span {
+  vertical-align: top;
+  font-size: medium;
+}
+
+.sidebar {
+  width: 36vh;
+  background-color: rgb(30, 35, 80);
+  color: #fff;
+  height: 100vh;
+}
+
+.sidebar_header {
+  padding: 10%;
+  text-align: center; 
+  border-bottom: 1px solid #ffffff33;
+}
+
+.sidebar_main {
+  padding-top: 8%;
+  padding-left: 6.3%;
+  font-weight: 500;
+}
+
+.menu-item {
+  cursor: pointer;
+  padding: 10px;
+}
+
+.sub-menu {
+  list-style-type: none;
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: height 0.5s ease-in-out,opacity 0.5s ease-in-out;
+}
+
+.sub-menu.open {
+  height: 64px;
+  opacity: 1;
+}
+
+.sub-menu li {
+  padding: 4px 40px;
+}

@@ -1,0 +1,9 @@
+.navbar {
+    display: flex;
+    margin-bottom: 3%;
+    border-bottom: 1.5px solid #081473;
+}
+
+.navbar_title {
+    font-size: x-large;
+}
