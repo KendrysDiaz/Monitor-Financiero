@@ -1,9 +1,11 @@
-import './Home.css'
-import Card from './Card'
-import BarChart from './Chart'
+import './Css/Home.css'
+import Card from './Components/Card'
+import GraphInflacion2023 from './Components/GraphInflacion2023'
+import GraphDesempleo2023 from './Components/GraphDesempleo2023'
+
 export default function Home() {
-    return <div>
-    <section className='home'>
+    return <div className='home'>
+    <section className='cards'>
         <Card
         title="PIB"
         description="$4'000.000"
@@ -26,7 +28,12 @@ export default function Home() {
         
         />
     </section>
+    <section style={{display: 'flex'}}>
+      <GraphInflacion2023/>
+      <GraphDesempleo2023/>
+
+    </section>
     
-    <BarChart/>
+    
   </div>
 }
