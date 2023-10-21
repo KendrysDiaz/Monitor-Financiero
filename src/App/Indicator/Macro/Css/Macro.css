@@ -1,0 +1,76 @@
+.graphM {
+    width: 35vw;
+    height: 38vh;
+    background-color: aliceblue;
+    box-shadow: -1px 0px 5px 0px #00000063;
+    margin: 0 18px;
+    border-radius: 1%;
+    padding: 1%;
+}
+
+.graphM:hover{
+    cursor: pointer;
+    background-color: rgba(139, 139, 139, 0.142);
+}
+
+.home_macro{
+    display: flex;
+    justify-content: center;
+    height: 80vh;
+
+}
+.modal_background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.336); /* Fondo semitransparente */
+    z-index: 999; /* Asegúrate de que la capa de fondo esté detrás del modal */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(2px);
+}
+
+.modal_containter {
+    width: 79vw;
+    border-radius: 1%;
+    padding: 2%;
+}
+
+.modal_graph h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+    display: flex;
+}
+
+.inputs_macro{
+    padding-left: 1%;
+    padding-bottom: 1%;
+    display: flex;
+
+}
+.close_button {
+    position: absolute;
+    top: 73px;
+    right: 131px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #80808075;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 50%;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.close_button:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+
+

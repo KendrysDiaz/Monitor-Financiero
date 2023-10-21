@@ -1,6 +1,6 @@
 .card {
-  width: 320px;
-  padding: 20px;
+  width: 330px;
+  padding: 16px;
   margin: 0 1.2%;
   color: aliceblue;
   border-radius: 8px;
@@ -11,3 +11,4 @@
 .card:hover {
   transform: translateY(-5px); 
 }
+

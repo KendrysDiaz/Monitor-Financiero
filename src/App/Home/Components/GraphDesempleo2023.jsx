@@ -20,6 +20,14 @@ export default function GraphDesempleo2023() {
           labels: {
             boxWidth: 20,
             padding: 20
+          },
+          title: {
+            display: true,
+            text: 'Desempleo / %',
+            font: {
+              size: 16,
+              weight: 'bold', 
+          },
           }
         },
         tooltip: {
@@ -28,7 +36,7 @@ export default function GraphDesempleo2023() {
             label: function (context) {
               const label = context.dataset.label || '';
               if (label) {
-                return label + ': ' + context.parsed.y;
+                return label + ': ' + context.parsed + '%';
               }
               return context.parsed.y;
             }
@@ -40,16 +48,16 @@ export default function GraphDesempleo2023() {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await axios.get('https://api-node-v1-o9xv-dev.fl0.io/api/v1/inflacion/');
+          const response = await axios.get('https://tamworth-swift-parrot-msbt.2.us-1.fl0.io/api/v1/desempleo/grafica');
           const data = response.data.data;
           const filteredData = data.filter(dato => dato.Ano == 2023);
   
           // Extract labels and values from filtered data
           const labels = filteredData.map(dato => dato.Mes + " " + dato.Ano);
-          const Values = filteredData.map(dato => dato.Porcentaje);
+          const values = filteredData.map(dato => dato.Tasa);
   
           setAño(labels);
-          setValues(Values);
+          setValues(values);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
@@ -65,7 +73,7 @@ export default function GraphDesempleo2023() {
       labels: labels,
       datasets: [
         {
-          label: 'Inflación 2023',
+          label: 'Desempleo',
           backgroundColor: backgroundColors,
           borderColor: backgroundColors.map(color => color.replace('0.2', '1')),
           borderWidth: 2,
@@ -77,7 +85,7 @@ export default function GraphDesempleo2023() {
     };
     
     return (
-      <div className="graph" style={{ height: '59.4vh', width: '25vw', padding:'5px 7px 0 7px' }}>
+      <div className="graph" style={{ height: '57.8vh', width: '26.5vw', padding:'15px 0px 0px'}}>
         <Doughnut data={data} options={options} />
       </div>
     );

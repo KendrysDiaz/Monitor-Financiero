@@ -16,7 +16,12 @@ export default function GraphInflacion2023() {
     const options = {
       scales: {
         y: {
-          beginAtZero: true
+          beginAtZero: true,
+            display: true,
+            title: {
+              display: true,
+              text: 'Porcentaje %'
+            },
         }
       },
       plugins: {
@@ -24,7 +29,11 @@ export default function GraphInflacion2023() {
           display: true,
           labels: {
             boxWidth: 20,
-            padding: 20
+            padding: 20,
+            font: {
+              size: '16px',
+              weight: 'bold', 
+            },
           }
         },
         tooltip: {
@@ -33,7 +42,7 @@ export default function GraphInflacion2023() {
             label: function (context) {
               const label = context.dataset.label || '';
               if (label) {
-                return label + ': ' + context.parsed.y;
+                return label + ': ' + context.parsed.y + '%';
               }
               return context.parsed.y;
             }
@@ -45,7 +54,7 @@ export default function GraphInflacion2023() {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await axios.get('https://api-node-v1-o9xv-dev.fl0.io/api/v1/inflacion/');
+          const response = await axios.get('https://tamworth-swift-parrot-msbt.2.us-1.fl0.io/api/v1/inflacion/grafica');
           const data = response.data.data;
           const filteredData = data.filter(dato => dato.Ano == 2023);
   
@@ -70,7 +79,7 @@ export default function GraphInflacion2023() {
       labels: labels,
       datasets: [
         {
-          label: 'Inflación 2023',
+          label: 'Inflación',
           backgroundColor: backgroundColors,
           borderColor: backgroundColors.map(color => color.replace('0.2', '1')),
           borderWidth: 2,
