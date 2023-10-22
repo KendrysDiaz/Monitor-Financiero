@@ -1,7 +1,7 @@
 # Monitor-Financiero
 Antes de usarlo:
-1. Verifica que tengas React instalado.🪄
-.............................................................
+-> Verifica que tengas React instalado.🪄
+
 Para poder usarlo:
 1. Clonarlo.
 2. En la terminal de tu editor de codigo fuente, ejecuta el siguiente comando: npm i. #Instalará todas las dependencias necesarias.
