@@ -23,7 +23,7 @@ ChartJS.register(
     Legend,
 );
 
-export default function LineChart({onClose}) {
+export default function PredictionDeuda({onClose}) {
     const [labels, setAño] = useState([]);
     const [values, setValues] = useState([]);
     const [valuesP, setValuesP] = useState([]);
@@ -65,12 +65,12 @@ export default function LineChart({onClose}) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('https://tamworth-swift-parrot-msbt.2.us-1.fl0.io/api/v1/inflacion/grafica');
+                const response = await axios.get('https://tamworth-swift-parrot-msbt.2.us-1.fl0.io/api/v1/deuda/grafica');
                 const data = response.data.data;
 
                 // Extract labels and values from filtered data
                 const labels = data.map(dato => dato.Ano + " " + dato.Mes);
-                const values = data.map(dato => dato.Porcentaje);
+                const values = data.map(dato => dato.total);
 
                 setAño(labels);
                 setValues(values);
@@ -83,9 +83,8 @@ export default function LineChart({onClose}) {
     }, []);
 
     const fetchData = async (Mes) => {
-        console.log(Mes)
         try {
-            const response = await axios.post('https://tamworth-swift-parrot-msbt.2.us-1.fl0.io/api/v1/inflacion/prediccion', {
+            const response = await axios.post('https://tamworth-swift-parrot-msbt.2.us-1.fl0.io/api/v1/deuda/prediccion', {
                 date: {
                     year: selectedYear,
                     month: Mes,
@@ -98,7 +97,7 @@ export default function LineChart({onClose}) {
 
             // Combina los elementos únicos con el arreglo existente
             setAño(labels.concat(labelsNuevos));
-            setValuesP(data.map(dato => dato.Porcentaje))
+            setValuesP(data.map(dato => dato.total))
         } catch (error) {
             console.error('Error al obtener datos:', error);
         }
@@ -108,14 +107,14 @@ export default function LineChart({onClose}) {
         labels: labels,
         datasets: [
             {
-                label: 'PIB Real',
+                label: 'Deuda Real',
                 data: values,
                 backgroundColor: 'rgba(75, 19, 192, 0.2)', // Color para PIB Real
                 borderColor: 'rgba(75, 19, 192, 1)', // Borde para PIB Real
                 borderWidth: 2,
             },
             {
-                label: 'PIB Predicción',
+                label: 'Deuda Predicción',
                 data: valuesP,
                 backgroundColor: 'rgba(255, 99, 132, 0.2)', // Color para PIB Predicción
                 borderColor: 'rgba(255, 99, 132, 1)', // Borde para PIB Predicción
@@ -181,7 +180,7 @@ export default function LineChart({onClose}) {
                             X
                         </button>
             <div className='modal_graph' style={{ width: '79vw' }}>
-                <h2 style={{display:'block'}}>Predicción de Inflación</h2>
+                <h2 style={{display:'block'}}>Predicción de Deuda</h2>
             </div>
             <div className='inputs_macro'>
             <div style={{marginRight:'15px'}}>

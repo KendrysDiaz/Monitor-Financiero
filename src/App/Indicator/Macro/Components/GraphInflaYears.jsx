@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { createChart } from 'lightweight-charts';
-import LineChart from '../../../../postejemplo';
+import PredictionInfla from './predictions/PredictionInfla';
 
 export default function GraphInflaYears() {
     const [data, setData] = useState([]);
@@ -9,7 +9,7 @@ export default function GraphInflaYears() {
     const chartInstance = useRef(null);
     const handleChartClick = () => {
         setIsModalOpen(!isModalOpen); // Abre el modal cuando se hace clic en el gráfico
-      };
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -26,8 +26,6 @@ export default function GraphInflaYears() {
     }, []); // Se ejecutará cuando data cambie y no sea un array vacío
 
     useEffect(() => {
-
-
         if (data.length > 0) {
             const chartElement = document.getElementById('chartInfla');
             const chartInfla = createChart(chartElement, {
@@ -127,12 +125,10 @@ export default function GraphInflaYears() {
             };
         }
 
-
-
     }, [data]);
 
     return <>
         <div id="chartInfla" className='graphM' onClick={handleChartClick}/>
-        {isModalOpen && <LineChart onClose={handleChartClick}/>}
+        {isModalOpen && <PredictionInfla onClose={handleChartClick}/>}
     </>;
 };

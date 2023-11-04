@@ -1,10 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { createChart } from 'lightweight-charts';
+import PredictionPIB from './predictions/PredictionPIB';
 
 export default function GraphPIBYears() {
+    const [isModalOpen, setIsModalOpen] = useState(false); 
     const [data, setData] = useState([]);
     const chartInstance = useRef(null);
+    const handleChartClick = () => {
+        setIsModalOpen(!isModalOpen); // Abre el modal cuando se hace clic en el gráfico
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -20,8 +25,6 @@ export default function GraphPIBYears() {
     }, []); 
 
     useEffect(() => {
-
-
         if (data.length > 0) {
             const chartElement = document.getElementById('chartPIB');
             const chartPIB = createChart(chartElement, {
@@ -109,14 +112,14 @@ export default function GraphPIBYears() {
                     lineSeries.setData(chartData.slice(0, index + 1));
                     index++;
                 } else {
-                    clearInterval(intervalId);
+                    clearInterval(intervalId)
                 }
             }, 200);// Ajusta este valor para cambiar la velocidad de la animación
 
             return () => {
                 clearInterval(intervalId);
                 if (chartInstance.current !== null) {
-                    chartInstance.current.remove();
+                    chartInstance.current.remove()
                 }
             };
         }
@@ -125,5 +128,8 @@ export default function GraphPIBYears() {
 
     }, [data]);
 
-    return <div id="chartPIB"  className='graphM' style={{marginBottom:'16px', marginRight: '16px'}}/>;
+    return <>
+    <div id="chartPIB"  className='graphM' style={{marginBottom:'16px', marginRight: '16px'}} onClick={handleChartClick}/>
+    {isModalOpen && <PredictionPIB onClose={handleChartClick}/>}
+    </> 
 };

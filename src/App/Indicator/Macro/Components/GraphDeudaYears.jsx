@@ -1,10 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { createChart } from 'lightweight-charts';
+import PredictionDeuda from './predictions/PredictionDeuda';
 
 export default function GraphDeudaYears() {
+    const [isModalOpen, setIsModalOpen] = useState(false); 
     const [data, setData] = useState([]);
     const chartInstance = useRef(null);
+
+    const handleChartClick = () => {
+        setIsModalOpen(!isModalOpen); // Abre el modal cuando se hace clic en el gráfico
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -83,7 +89,6 @@ export default function GraphDeudaYears() {
             });
 
             const sortedData = data.sort((a, b) => new Date(`${a.Ano}-${a.MesNumerico > 9 ? a.MesNumerico : `0${a.MesNumerico}`}-${a.Dia}`) - new Date(`${b.Ano}-${b.MesNumerico > 9 ? b.MesNumerico : `0${b.MesNumerico}`}-${b.Dia}`));
-            console.log(sortedData)
             const chartData = sortedData.map((item) => ({
                 time: `${item.Ano}-${item.MesNumerico > 9 ? item.MesNumerico : `0${item.MesNumerico}`}-${item.Dia}`,
                 value: item.total,
@@ -122,5 +127,8 @@ export default function GraphDeudaYears() {
 
     }, [data]);
 
-    return <div id="chartDeuda" className='graphM' />;
+    return <>
+    <div id="chartDeuda" className='graphM' onClick={handleChartClick}/>
+    {isModalOpen && <PredictionDeuda onClose={handleChartClick}/>}
+    </>
 };

@@ -1,10 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { createChart } from 'lightweight-charts';
+import PredictionDesempleo from './predictions/PredictionDesempleo';
 
 export default function GraphDesempleoYears() {
+    const [isModalOpen, setIsModalOpen] = useState(false); 
     const [data, setData] = useState([]);
     const chartInstance = useRef(null);
+
+    const handleChartClick = () => {
+        setIsModalOpen(!isModalOpen); // Abre el modal cuando se hace clic en el gráfico
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -126,5 +132,8 @@ export default function GraphDesempleoYears() {
 
     }, [data]);
 
-    return <div id="chartDesempleo" className='graphM' style={{marginBottom:'16px'}}/>;
+    return<>
+    <div id="chartDesempleo" className='graphM' style={{marginBottom:'16px'}} onClick={handleChartClick}/>
+    {isModalOpen && <PredictionDesempleo onClose={handleChartClick}/>}
+    </> 
 };
