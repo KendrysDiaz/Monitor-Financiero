@@ -14,11 +14,14 @@
     "axios": "^1.5.1",
     "chart.js": "^4.4.0",
     "d3": "^7.8.5",
+    "echarts": "^5.4.3",
     "lightweight-charts": "^4.1.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
-    "react-icons": "^4.11.0"
+    "react-icons": "^4.11.0",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

@@ -18,8 +18,8 @@ export default function Dashboard() {
         'Inicio': <Home/>,
         'Macro': <Macro/>,
         'Micro': <Micro/>,
-        'Inversiones': <Investment/>,
-        'Acciones': <Actions/>
+        'Acciones': <Actions/>,
+        'Inversiones': <Investment/>
     };
 
     const Component = componentMap[optionState]

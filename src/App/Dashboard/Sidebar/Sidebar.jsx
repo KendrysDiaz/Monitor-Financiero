@@ -49,14 +49,14 @@ export default function Sidebar({updateState}) {
             </div>
           </li>
           <li>
-            <div className="menu-item" style={selected === 'Inversiones' ? styleSelected : {}} onClick={() => {toggleSubMenu(0), toggleStateDash('Inversiones')}}>
-              <BsCoin style={styleIcon}/>
-              <span>Inversiones</span></div>
+          <div className="menu-item" style={selected === 'Acciones' ? styleSelected : {}} onClick={() => {toggleSubMenu(0), toggleStateDash('Acciones')}}>
+            <PiChartLineUpBold style={styleIcon} width={100}/><span>Acciones</span>
+            </div>            
           </li>
           <li>
-            <div className="menu-item" style={selected === 'Acciones' ? styleSelected : {}} onClick={() => {toggleSubMenu(0), toggleStateDash('Acciones')}}>
-            <PiChartLineUpBold style={styleIcon} width={100}/><span>Acciones</span>
-            </div>
+          <div className="menu-item" style={selected === 'Inversiones' ? styleSelected : {}} onClick={() => {toggleSubMenu(0), toggleStateDash('Inversiones')}}>
+              <BsCoin style={styleIcon}/>
+              <span>Inversiones</span></div>
           </li>
         </ul>
       </div>
