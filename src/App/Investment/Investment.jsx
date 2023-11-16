@@ -1,3 +1,9 @@
-export default function Investment(params) {
-    return <p>Inversiones</p>
+import StockTreemap from "../Indicator/Micro/Acciones/Acciones";
+import BuscadorStock from "./Buscador/Buscador";
+
+export default function Investment() {
+    return <>
+    <BuscadorStock/>
+    <StockTreemap/>
+    </>
 }

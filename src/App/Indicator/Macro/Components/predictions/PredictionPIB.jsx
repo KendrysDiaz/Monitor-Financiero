@@ -41,9 +41,7 @@ export default function PredictionPIB({onClose}) {
     }
 
     function predictions(value) {
-        console.log(value)
         setSelectedMonth(value)
-        console.log(selectedMonth)
         fetchData()
     }
 
@@ -56,7 +54,6 @@ export default function PredictionPIB({onClose}) {
                 // Extract labels and values from filtered data
                 const labels = data.map(dato => dato.Ano + "-" + dato.Trimestre);
                 const values = data.map(dato => dato.PIB);
-                console.log(labels)
                 setAño(labels);
                 setValues(values);
             } catch (error) {

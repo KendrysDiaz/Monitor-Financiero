@@ -59,7 +59,7 @@ const Slider_moneda = () => {
   };
 
   return (
-    <div style={{ backgroundColor: 'black', color: 'white' }}>
+    <div style={{ backgroundColor: 'black', color: 'white', marginBottom: '1%'}}>
       <marquee>
         {prices.map((currency, index) => (
           <div style={{ display: 'inline-block', marginRight: '15px' }}>
@@ -72,10 +72,8 @@ const Slider_moneda = () => {
             </span>
             {currency.value.cop.toFixed(2)}COP
           </div>
-
         ))}
       </marquee>
-
     </div>
   );
 };

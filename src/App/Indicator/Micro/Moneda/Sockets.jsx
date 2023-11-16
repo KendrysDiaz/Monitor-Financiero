@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { createChart } from 'lightweight-charts';
 import { io } from 'socket.io-client';
 import axios from 'axios';
+import CurrencyConverter from './Convertidor';
 
 const URL = 'https://tamworth-swift-parrot-msbt.2.us-1.fl0.io';
 const socket = io(URL);
@@ -10,7 +11,9 @@ export default function MonedaSockets() {
   const chartContainerRef = useRef(null);
   const chartInstance = useRef(null);
   const [dataGraph, setGraph] = useState([]);
+  const [dataGraphPrediction, setGraphPrediction] = useState([]);
   const [statusMoneda, setStatus] = useState(null);
+  const [selectedDay, setDay] = useState("");
   useEffect(() => {
     socket.on('live', (data) => {
       const nuevoPrecio = { 'valor': data.quotes.USDCOP, 'vigenciadesde': data.quotes.timestamp }
@@ -31,13 +34,27 @@ export default function MonedaSockets() {
     };
     fetchData();
   }, []);
-
-
   useEffect(() => {
-    if (!dataGraph) return;
+    const fetchDataPred = async () => {
+      if (selectedDay != "") {
+        try {
+          const response = await axios.get(`https://api-python-weathered-dream-3802.fly.dev/indicadores/moneda/prediccion/${selectedDay}`);
+          const data = response.data;
+          setGraphPrediction(data);
+        } catch (error) {
+          console.error('Error al obtener datos:', error);
+        }
+      }
+    };
+    fetchDataPred();
+  }, [selectedDay]);
+
+  
+  useEffect(() => {
+    if (!dataGraph || !dataGraphPrediction) return;
     chartInstance.current = createChart(chartContainerRef.current, {
-      width: 800,
-      height: 400,
+      width: 720,
+      height: 450,
       layout: {
         backgroundColor: '#ffffff',
         textColor: '#333',
@@ -62,7 +79,7 @@ export default function MonedaSockets() {
     const series = chartInstance.current.addAreaSeries({
       topColor: statusMoneda ? 'rgb(0, 160, 54, 0.56)' : statusMoneda == false ? 'rgb(243, 17, 67, 0.56)' : 'rgb(48, 74, 255, 0.56)',
       bottomColor: statusMoneda ? 'rgb(0, 160, 54, 0.04)' : statusMoneda == false ? 'rgb(243, 17, 67,0.04)' : 'rgb(48, 74, 255, 0.04)',
-      lineColor: statusMoneda ? 'rgb(0, 160, 54, 1)' : statusMoneda == false ? 'rgb(243, 17, 67)' : 'rgb(48, 74, 255)',
+      lineColor: statusMoneda ? 'rgb(0, 160, 54)' : statusMoneda == false ? 'rgb(243, 17, 67)' : 'rgb(48, 74, 255)',
       lineWidth: 2,
     });
 
@@ -81,6 +98,28 @@ export default function MonedaSockets() {
 
     series.setData(sortedData);
 
+    const seriesPrediction = chartInstance.current.addLineSeries({
+      topColor: 'rgba(0, 0, 255, 0.56)',  // Azul semi-transparente para el color superior
+  bottomColor: 'rgba(0, 0, 255, 0.04)',  // Azul muy transparente para el color inferior
+  lineColor: 'rgb(0, 2, 255)',  // Azul para la línea
+  lineWidth: 2,
+    });
+
+    const sortedDataPrediction = dataGraphPrediction.map(item => ({
+      time: item.vigenciadesde,
+      value: parseFloat(item.valor),
+    })).sort((a, b) => {
+      if (a.time > b.time) {
+        return 1;
+      }
+      if (a.time < b.time) {
+        return -1;
+      }
+      return 0;
+    });
+
+    seriesPrediction.setData(sortedDataPrediction);
+
     // Suponiendo que sortedData es un array de objetos con una propiedad 'value'
     const lastIndex = sortedData.length - 1;
 
@@ -88,7 +127,6 @@ export default function MonedaSockets() {
       // Compara solo si no es el último elemento
       if (index == lastIndex) {
         const nextItem = sortedData[index - 1];
-
         if (item.value > nextItem.value) {
           setStatus(true);
           series.createPriceLine({
@@ -119,7 +157,27 @@ export default function MonedaSockets() {
         chartInstance.current = null;
       }
     };
-  }, [dataGraph, socket]);
+  }, [dataGraph, dataGraphPrediction, socket]);
 
-  return (<div ref={chartContainerRef} />);
+  return (<>
+    <div>
+      <div style={{ marginBottom: '1%' }}>
+        <span style={{ marginRight: '1%', fontWeight: 'bold' }}>Predicción</span>
+        <select value={selectedDay} onChange={(e) => setDay(e.target.value)}>
+          <option value={""}></option>
+          <option value={1}>1</option>
+          <option value={2}>2</option>
+          <option value={3}>3</option>
+        </select> 
+        {dataGraphPrediction.length > 0 && 
+        <span style={{marginLeft: '15px', fontStyle: 'italic'}}>El valor del COP con respecto al Dolar en {selectedDay} dias puede que sea {Math.round(dataGraphPrediction[dataGraphPrediction.length - 1].valor)} COP</span>}
+      </div>
+      <div style={{display: 'flex'}}>
+      <div ref={chartContainerRef} />
+      <CurrencyConverter />
+      </div>
+      
+      </div>
+    
+  </>);
 }

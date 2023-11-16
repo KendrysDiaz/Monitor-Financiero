@@ -27,7 +27,7 @@ export default function Dashboard() {
     return <div className="dashboard">
         <Sidebar updateState={updateState}/>  
         <div className="dashboard_content">
-            <Navbar option={optionState == 'Macro'? 'Indicadores Macroeconómicos' : optionState == 'Micro' ? 'Indicadores Microeconómicos' : optionState}/>
+            <Navbar option={optionState == 'Macro'? 'Indicadores Macroeconómicos' : optionState == 'Micro' ? 'Moneda' : optionState}/>
             {Component}
         </div>
     </div>
