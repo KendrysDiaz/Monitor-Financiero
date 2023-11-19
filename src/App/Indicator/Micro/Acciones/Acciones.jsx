@@ -7,8 +7,6 @@ import DiaNoBursatil from '../../../Error/Error';
 const StockTreemap = () => {
   const [data, setData] = useState(null);
   const [dataStock, setDataStock] = useState(null);
-  const [selectedStock, setSelectedStock] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,13 +43,7 @@ const StockTreemap = () => {
     }));
   };
 
-  if (!dataStock) {
-    // Data is still being fetched
-    return <div>Loading...</div>;
-  } else if (dataStock == {} || dataStock.msg == "Dia no bursatil"){
-    return <DiaNoBursatil/>
-
-  }
+  
   const getColor = (change) => {
     if (change <= -3 && change < 0) return 'rgb(246, 53, 56)';
     if (change <= -2 && change > -3) return 'rgb(191, 64, 69)';
@@ -63,9 +55,9 @@ const StockTreemap = () => {
     return 'rgb(239, 246, 255)'
   };
 
-  const CustomizedContent = ({ x, y, width, height, name, change }) => {
+  const CustomizedContent = ({ x, y, width, height, name, value, change }) => {
     return (
-      <g onClick={() => handleRectMouseClick(name)}>
+      <g>
         <rect
           x={x}
           y={y}
@@ -90,26 +82,30 @@ const StockTreemap = () => {
       </g>
     );
   };
-  const handleRectMouseClick = (name) => {
-    setSelectedStock(name);
-    setIsModalOpen(!isModalOpen);
-  };
 
 
   const renderTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
-      const { name, change } = payload[0].payload;
+      const { name, change, value } = payload[0].payload;
       return (
         <div style={{ background: 'rgba(255,255,255,0.8)', padding: '5px', border: '1px solid #ccc' }}>
           <p>{name}</p>
           <p>Change: {change}%</p>
+          <p>{value}</p>
+
         </div>
       );
     }
 
     return null;
   };
+  if (!dataStock) {
+    // Data is still being fetched
+    return <div>Loading...</div>;
+  } else if (dataStock == {} || dataStock.msg == "Dia no bursatil" || formatData == undefined){
+    return <DiaNoBursatil/>
 
+  }
   return (
     <div>
       <Treemap
@@ -122,14 +118,6 @@ const StockTreemap = () => {
       >
         <Tooltip content={renderTooltip} />
       </Treemap>
-      {isModalOpen && (
-        <StockPrediccion
-          stock={selectedStock} // Pasa el nombre de la acción al componente modal
-          onClose={setIsModalOpen}
-        // Otras props según las necesidades de tu componente modal
-        />
-      )}
-
     </div>
   );
 };

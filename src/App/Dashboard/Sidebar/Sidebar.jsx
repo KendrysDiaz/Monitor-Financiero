@@ -49,12 +49,11 @@ export default function Sidebar({updateState}) {
             <div className={openSubMenu === 1?'sub-menu open':'sub-menu'}>
               <ul className={' open'}>
                 <li style={selected === 'Micro' ? styleSelected : {}} onClick={() => toggleStateDash('Micro')}> <FaChevronRight style={{paddingRight:'6%', width:'6%', marginTop: '2px'}} /><span>Moneda</span></li>
-                <li style={selected === 'Acciones' ? styleSelected : {}}onClick={() => toggleStateDash('Acciones')}> <FaChevronRight style={{paddingRight:'6%', width:'6%', marginTop: '2px'}}/><span>Acciones</span></li>
               </ul>
             </div>
           </li>
           <li>
-          <div className="menu-item" style={selected === 'Inversiones' ? styleSelected : {}} onClick={() => {toggleSubMenu(0), toggleStateDash('Inversiones')}}>
+          <div className="menu-item" style={selected === 'Inversiones & Acciones' ? styleSelected : {}} onClick={() => {toggleSubMenu(0), toggleStateDash('Inversiones & Acciones')}}>
               <BsCoin style={styleIcon}/>
               <span>Inversiones</span></div>
           </li>

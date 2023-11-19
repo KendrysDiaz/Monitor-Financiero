@@ -1,13 +1,20 @@
 import { useState, useEffect, useRef } from "react"
 import axios from 'axios';
 import { createChart } from 'lightweight-charts';
+import {
+    TextField,
+    Button,
+    OutlinedInput,
+    InputAdornment
+} from '@mui/material';
 
 
-export default function StockPrediccion({ stock, onClose }) {
+export default function StockPrediccion({ stock, infoInversion}) {
     const chartContainerRef = useRef(null);
     const chart = useRef(null);
     const candleSeries = useRef(null);
     const [dataHistory, setHistory] = useState(null);
+    const [stocks, setStocks] = useState('20');
     const [dataPrediction, setPrediction] = useState(null);
 
     useEffect(() => {
@@ -22,13 +29,25 @@ export default function StockPrediccion({ stock, onClose }) {
             }
         };
         fetchData();
-    }, []);
+    }, [stock]);
+    useEffect(() => {
+        const fetchPredict = async () => {
+            try {
+                    const response = await axios.get(`https://api-python-weathered-dream-3802.fly.dev/indicadores/acciones/prediccion/${stock}`);
+                    const data = response.data;
+                    setPrediction(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        fetchPredict();
+    }, [dataHistory, stock])
 
     useEffect(() => {
-        if (dataHistory) {
+        if (dataHistory && dataPrediction) {
             chart.current = createChart(chartContainerRef.current, {
-                width: 600,
-                height: 300,
+                width: 620,
+                height: 320,
                 layout: {
                     background: {
                         type: 'solid',
@@ -51,7 +70,26 @@ export default function StockPrediccion({ stock, onClose }) {
                     borderColor: 'rgba(197, 203, 206, 0.8)',
                 },
             });
+            const dataHistoryDates = Object.keys(dataHistory);
 
+            const predictionData = dataPrediction
+                .filter((item) => !dataHistoryDates.includes(item.fecha))
+                .map((item) => ({
+                    time: item.fecha,
+                    value: parseFloat(item.valor),
+                }));
+
+            console.log(predictionData);
+        if (predictionData.length > 0) {
+            // Add a new series for predicted data
+            const predictionSeries = chart.current.addLineSeries({
+                color: 'blue', // You can set any color you prefer
+                lineWidth: 2,
+            });
+
+            // Set predicted data to the new series
+            predictionSeries.setData(predictionData);
+        }
             candleSeries.current = chart.current.addCandlestickSeries({
                 upColor: 'rgb(48, 204, 90)',
                 downColor: 'rgb(246, 53, 56)',
@@ -82,17 +120,43 @@ export default function StockPrediccion({ stock, onClose }) {
                 }
             };
         }
-    }, [dataHistory]);
+    }, [dataHistory, stock, dataPrediction]);
+    const handleStocksChange = (event) => {
+        const nuevoValor = parseFloat(event.target.value);
+        if (!isNaN(nuevoValor) && nuevoValor >= 20) {
+            setStocks(nuevoValor);
+        }
+    };
+    const sendInfo = () => {
+        if (stock && dataHistory && dataPrediction) {
+        const info = {inversiones: stocks, datoReal: Object.values(dataHistory)[0]['4. close'], datoPrediccion: dataPrediction[length-1].valor}
+        infoInversion(info);}
+    };
 
-    return <div className='modal_background' >
-        <div className='modal_containter' style={{ backgroundColor: 'aliceblue' }}>
-            <button className="close_button" onClick={() => onClose(false)}>
-                X
-            </button>
-            <h2 style={{ display: 'block' }}>ACCIONES DE {stock}</h2>
-            <div className='modal_graph' style={{ width: '79vw', height: '500px' }}>
-                <div ref={chartContainerRef} />
-            </div>
+    return <div>
+        <div ref={chartContainerRef} />
+        <h5 style={{ margin: '3% 0' }}>Inversión</h5>
+        <div style={{ marginTop: '4%' }}>
+            <OutlinedInput
+                startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                label="Amount"
+                value={dataHistory != null ? Object.values(dataHistory)[0]['4. close'] : "Cargando..."}
+                style={{ marginRight: '2%' }}
+                disabled={true}
+            />
+            <TextField
+                label="Cantidad de Acciones"
+                variant="outlined"
+                type="number"
+                value={stocks >= 20 ? stocks : ""}
+                onChange={handleStocksChange}
+                style={{ marginRight: '4%' }}
+                InputProps={{ inputProps: { min: 20 } }}
+            />
+            <Button variant="contained" color='primary' onClick={() => sendInfo()}>
+                Invertir
+            </Button>
         </div>
+
     </div>
 }

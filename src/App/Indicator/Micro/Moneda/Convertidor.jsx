@@ -15,8 +15,6 @@ const CurrencyConverter = () => {
   const [exchangeRate, setExchangeRate] = useState(null);
   const [convertedAmount, setConvertedAmount] = useState(0);
   const [topCurrencies, setTopCurrencies] = useState([]);
-  const [fromCurrencyFlag, setFromCurrencyFlag] = useState(null);
-  const [toCurrencyFlag, setToCurrencyFlag] = useState(null);
 
   useEffect(() => {
     const fetchExchangeRate = async () => {
@@ -52,23 +50,6 @@ const CurrencyConverter = () => {
     fetchTopCurrencies();
   }, []);
 
-  useEffect(() => {
-    const fetchCurrencyFlag = async (currencyCode, setFlag) => {
-      try {
-        const response = await fetch(
-          `https://restcountries.com/v3.1/alpha/${currencyCode}`
-        );
-        const data = await response.json();
-        const flagUrl = data.flags[0];
-        setFlag(flagUrl);
-      } catch (error) {
-        console.error(`Error fetching flag for ${currencyCode}:`, error);
-      }
-    };
-
-    fetchCurrencyFlag(fromCurrency, setFromCurrencyFlag);
-    fetchCurrencyFlag(toCurrency, setToCurrencyFlag);
-  }, [fromCurrency, toCurrency]);
 
   useEffect(() => {
     if (exchangeRate !== null) {
@@ -82,16 +63,16 @@ const CurrencyConverter = () => {
   };
 
   const currencies = [
-    { code: 'USD', name: 'Dólar Estadounidense', flag: '' },
-    { code: 'EUR', name: 'Euro', flag: '🇪🇺' },
-    { code: 'GBP', name: 'Libra Esterlina', flag: '🇬🇧' },
-    { code: 'JPY', name: 'Yen Japonés', flag: '🇯🇵' },
-    { code: 'CNY', name: 'Yuan Chino', flag: '🇨🇳' },
-    { code: 'INR', name: 'Rupia India', flag: '🇮🇳' },
-    { code: 'AUD', name: 'Dólar Australiano', flag: '🇦🇺' },
-    { code: 'CAD', name: 'Dólar Canadiense', flag: '🇨🇦' },
-    { code: 'CHF', name: 'Franco Suizo', flag: '🇨🇭' },
-    { code: 'SEK', name: 'Corona Sueca', flag: '🇸🇪' },
+    { code: 'USD', name: 'Dólar Estadounidense'},
+    { code: 'EUR', name: 'Euro' },
+    { code: 'GBP', name: 'Libra Esterlina' },
+    { code: 'JPY', name: 'Yen Japonés' },
+    { code: 'CNY', name: 'Yuan Chino' },
+    { code: 'INR', name: 'Rupia India' },
+    { code: 'AUD', name: 'Dólar Australiano' },
+    { code: 'CAD', name: 'Dólar Canadiense' },
+    { code: 'CHF', name: 'Franco Suizo' },
+    { code: 'SEK', name: 'Corona Sueca' },
     // Agrega más divisas según sea necesario
   ];
 
@@ -120,8 +101,7 @@ const CurrencyConverter = () => {
             style={{backgroundColor: 'white'}}
           >
             {currencies.map((currency) => (
-              <MenuItem key={currency.code} value={currency.code}>
-                {currency.flag} {currency.code} - {currency.name}
+              <MenuItem key={currency.code} value={currency.code}>{currency.code} - {currency.name}
               </MenuItem>
             ))}
           </Select>
