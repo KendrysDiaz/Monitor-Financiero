@@ -38,7 +38,7 @@ export default function MonedaSockets() {
     const fetchDataPred = async () => {
       if (selectedDay != "") {
         try {
-          const response = await axios.get(`https://api-python.fly.dev/indicadores/moneda/prediccion/${selectedDay}`);
+          const response = await axios.get(`https://api-python-2.fly.dev/indicadores/moneda/prediccion/${selectedDay}`);
           const data = response.data;
           setGraphPrediction(data);
         } catch (error) {
