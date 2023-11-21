@@ -5,7 +5,8 @@ import {
     TextField,
     Button,
     OutlinedInput,
-    InputAdornment
+    InputAdornment, 
+    InputLabel
 } from '@mui/material';
 
 
@@ -20,7 +21,7 @@ export default function StockPrediccion({ stock, infoInversion}) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=IBM&apikey=demo`);
+                const response = await axios.get(`https://api-python-2.fly.dev/indicadores/acciones/historical/${stock}`);
                 const data = response.data;
                 const history = data['Monthly Time Series'];
                 setHistory(history);
@@ -30,10 +31,11 @@ export default function StockPrediccion({ stock, infoInversion}) {
         };
         fetchData();
     }, [stock]);
+
     useEffect(() => {
         const fetchPredict = async () => {
             try {
-                    const response = await axios.get(`https://api-python-weathered-dream-3802.fly.dev/indicadores/acciones/prediccion/${stock}`);
+                    const response = await axios.get(`https://api-python-2.fly.dev/indicadores/acciones/prediccion/${stock}`);
                     const data = response.data;
                     setPrediction(data);
             } catch (error) {
@@ -41,7 +43,7 @@ export default function StockPrediccion({ stock, infoInversion}) {
             }
         }
         fetchPredict();
-    }, [dataHistory, stock])
+    }, [dataHistory])
 
     useEffect(() => {
         if (dataHistory && dataPrediction) {
@@ -71,7 +73,6 @@ export default function StockPrediccion({ stock, infoInversion}) {
                 },
             });
             const dataHistoryDates = Object.keys(dataHistory);
-
             const predictionData = dataPrediction
                 .filter((item) => !dataHistoryDates.includes(item.fecha))
                 .map((item) => ({
@@ -79,7 +80,6 @@ export default function StockPrediccion({ stock, infoInversion}) {
                     value: parseFloat(item.valor),
                 }));
 
-            console.log(predictionData);
         if (predictionData.length > 0) {
             // Add a new series for predicted data
             const predictionSeries = chart.current.addLineSeries({
@@ -100,10 +100,10 @@ export default function StockPrediccion({ stock, infoInversion}) {
             });
             const sortedData = Object.entries(dataHistory).map(([date, item]) => ({
                 time: date,
-                open: parseFloat(item['1. open']),  // Convert string to number if needed
-                high: parseFloat(item['2. high']),
-                low: parseFloat(item['3. low']),
-                close: parseFloat(item['4. close'])
+                open: parseFloat(item.open),  // Convert string to number if needed
+                high: parseFloat(item.high),
+                low: parseFloat(item.low),
+                close: parseFloat(item.close)
             })).sort((a, b) => {
                 if (a.time > b.time) {
                     return 1;
@@ -129,7 +129,9 @@ export default function StockPrediccion({ stock, infoInversion}) {
     };
     const sendInfo = () => {
         if (stock && dataHistory && dataPrediction) {
-        const info = {inversiones: stocks, datoReal: Object.values(dataHistory)[0]['4. close'], datoPrediccion: dataPrediction[length-1].valor}
+        console.log(dataPrediction[dataPrediction.length-1]);
+        const info = {inversiones: stocks, datoReal: Object.values(dataHistory)[0].close, datoPrediccion: dataPrediction[dataPrediction.length-1].valor}
+        console.log("Info being sent:", info);
         infoInversion(info);}
     };
 
@@ -137,13 +139,17 @@ export default function StockPrediccion({ stock, infoInversion}) {
         <div ref={chartContainerRef} />
         <h5 style={{ margin: '3% 0' }}>Inversión</h5>
         <div style={{ marginTop: '4%' }}>
-            <OutlinedInput
-                startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                label="Amount"
-                value={dataHistory != null ? Object.values(dataHistory)[0]['4. close'] : "Cargando..."}
-                style={{ marginRight: '2%' }}
-                disabled={true}
-            />
+        <TextField
+      id="outlined-basic"
+      label="Precio de la acción"
+      variant="outlined"
+      disabled
+      value={dataHistory != null ? Object.values(dataHistory)[0].close : "Cargando..."}
+      InputProps={{
+        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+      }}
+      style={{ marginRight: '2%', width: '200px' }} // Ajusta el ancho según tus necesidades
+    />
             <TextField
                 label="Cantidad de Acciones"
                 variant="outlined"

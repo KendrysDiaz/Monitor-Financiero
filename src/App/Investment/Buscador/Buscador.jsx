@@ -21,9 +21,7 @@ export default function BuscadorStock() {
     event.preventDefault();
     if (stock !== "") {
       try {
-        const response = await axios.get(
-          `https://api-python-weathered-dream-3802.fly.dev/indicadores/acciones/info/${stock}`
-        );
+        const response = await axios.get(`https://api-python-2.fly.dev/indicadores/acciones/info/${stock}`);
         const data = response.data;
         setInfo(data);
       } catch (error) {
